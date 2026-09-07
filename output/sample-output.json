@@ -1,0 +1,179 @@
+{
+  "metadata": {
+    "source_file": "raw-text.txt",
+    "generated_at": "2026-09-05T20:21:03+00:00",
+    "masking_enabled": true,
+    "total_valid_matches": 60,
+    "total_rejected": 13
+  },
+  "counts": {
+    "email_addresses": 7,
+    "urls": 6,
+    "phone_numbers": 5,
+    "credit_card_numbers": 3,
+    "times": 10,
+    "html_tags": 14,
+    "hashtags": 8,
+    "currency_amounts": 7
+  },
+  "data": {
+    "email_addresses": [
+      "a*********e@alueducation.com",
+      "b*************t@example.co.uk",
+      "n******y@shop.example.io",
+      "o*************s@sub.domain.example.org",
+      "a*****k@example.com",
+      "n*********t@example.dev",
+      "b*****g@example.com"
+    ],
+    "urls": [
+      "https://shop.example.com/account/billing?plan=pro&ref=email",
+      "http://legacy.example.net:8080/checkout#step-2",
+      "https://docs.example.com/api/v2/payments",
+      "https://status.example.com",
+      "https://billing.example.com/invoice/2026-0031",
+      "https://cdn.example.com/logo.png"
+    ],
+    "phone_numbers": [
+      "+*50 *88 *23 *56",
+      "(*55) *23-**67",
+      "*55-*87-**43",
+      "*55.*46.**00",
+      "+1 (*15) *55-**32"
+    ],
+    "credit_card_numbers": [
+      {
+        "masked": "**** **** **** 1111",
+        "brand": "Visa",
+        "length": 16,
+        "luhn_valid": true
+      },
+      {
+        "masked": "**** **** **** 0004",
+        "brand": "Mastercard",
+        "length": 16,
+        "luhn_valid": true
+      },
+      {
+        "masked": "**** **** 0005",
+        "brand": "American Express",
+        "length": 15,
+        "luhn_valid": true
+      }
+    ],
+    "times": [
+      "09:05",
+      "9:05 AM",
+      "21:30",
+      "11:30 PM",
+      "13:45:12",
+      "23:59",
+      "00:00",
+      "7:30 a.m.",
+      "12:00 PM",
+      "15:00"
+    ],
+    "html_tags": [
+      "<div class=\"invoice\" data-id=\"INV-2026-0031\">",
+      "<h1>",
+      "</h1>",
+      "<p>",
+      "<strong>",
+      "</strong>",
+      "</p>",
+      "<a href=\"https://billing.example.com/invoice/2026-0031\">",
+      "</a>",
+      "<img src=\"https://cdn.example.com/logo.png\" alt=\"Example Ltd\" />",
+      "<br>",
+      "<span class=\"muted\">",
+      "</span>",
+      "</div>"
+    ],
+    "hashtags": [
+      "#urgent",
+      "#billing",
+      "#Payments2026",
+      "#alu_regex",
+      "#DataEngineering",
+      "#regex",
+      "#ShipIt",
+      "#_private_tag"
+    ],
+    "currency_amounts": [
+      "$1,299.00",
+      "$49",
+      "EUR 25,00",
+      "150,000 RWF",
+      "£2,450.75",
+      "¥12,000",
+      "USD 3,500.50"
+    ]
+  },
+  "rejected": [
+    {
+      "type": "email_addresses",
+      "value": "double..dots@example.com",
+      "reason": "consecutive_dots"
+    },
+    {
+      "type": "email_addresses",
+      "value": "attacker@evil.example.com",
+      "reason": "injection_context:xss_script_tag"
+    },
+    {
+      "type": "urls",
+      "value": "https://evil.example.com/steal?c=",
+      "reason": "injection_context:xss_script_tag"
+    },
+    {
+      "type": "urls",
+      "value": "https://phish.example.com",
+      "reason": "injection_context:xss_js_scheme"
+    },
+    {
+      "type": "urls",
+      "value": "https://evil.example.com/rce.sh",
+      "reason": "injection_context:command_injection"
+    },
+    {
+      "type": "credit_card_numbers",
+      "value": "1234 5678 9012 3456",
+      "reason": "failed_luhn_checksum"
+    },
+    {
+      "type": "html_tags",
+      "value": "<script>",
+      "reason": "injection:xss_script_tag"
+    },
+    {
+      "type": "html_tags",
+      "value": "</script>",
+      "reason": "injection:xss_script_tag"
+    },
+    {
+      "type": "html_tags",
+      "value": "<img src=x onerror=\"alert('xss')\">",
+      "reason": "injection:xss_event_handler"
+    },
+    {
+      "type": "html_tags",
+      "value": "<iframe src=\"javascript:alert(document.domain)\">",
+      "reason": "injection:xss_iframe_tag"
+    },
+    {
+      "type": "html_tags",
+      "value": "</iframe>",
+      "reason": "injection:xss_iframe_tag"
+    },
+    {
+      "type": "html_tags",
+      "value": "<script>",
+      "reason": "injection:xss_script_tag"
+    },
+    {
+      "type": "html_tags",
+      "value": "</script>",
+      "reason": "injection:xss_script_tag"
+    }
+  ]
+}
